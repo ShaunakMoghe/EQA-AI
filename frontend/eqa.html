@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html data-wf-page="671df12b6bf84eee6461c3ea" data-wf-site="671dab410115a7ce810d3316" data-wf-status="1">
+<head>
+    <meta charset="utf-8"/>
+    <title>EQA</title>
+    <meta content="Unlock the power of AI to streamline your business operations and enhance customer experiences." name="description"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="Webflow" name="generator"/>
+    <link href="css/webflow-style.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        WebFont.load({ google: { families: ["Figtree:regular,500,600"] } });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <style>
+        /* Adjust the spacing for better readability */
+        .stock-paragraph-div {
+            margin-bottom: 20px; /* Add space below the paragraph */
+        }
+
+        .stock-number-div {
+            font-size: 1.2em; /* Increase font size for better visibility */
+            font-weight: bold;
+            margin-top: 10px; /* Add some space above the final score */
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="global-styles w-embed">
+            <style>
+                /* Your custom styles here */
+            </style>
+        </div>
+        <main class="main-wrapper">
+            <div class="logo-banner">
+                <img src="images/eqa-20white-20logo.png" loading="lazy" alt="EQA Logo" class="equa-logo"/>
+            </div>
+            <header class="section_home_hero-header">
+                <div class="padding-global">
+                    <div class="container-large">
+                        <div class="home_hero-header_content">
+                            <div class="main-hero-header">
+                                <h1 class="heading-style-h1">Stock Analysis</h1>
+                            </div>
+                            <div class="contact5_form-block stock-input-block w-form">
+                                <form id="wf-form-Stock-Symbol" name="wf-form-Stock-Symbol" class="contact5_form stock-input-form">
+                                    <div class="form_field-wrapper stock-input-wrapper">
+                                        <input class="form_input w-input" maxlength="256" name="stock-input" data-name="stock-input" placeholder="Enter Stock Symbol" type="text" id="stock-input" required=""/>
+                                    </div>
+                                    <div class="form_field-wrapper stock-input-wrapper">
+                                        <input class="form_input w-input" maxlength="256" name="sector-input" data-name="sector-input" placeholder="Enter Sector" type="text" id="sector-input" required=""/>
+                                    </div>
+                                    <button type="button" id="analyze-button" class="button w-button">Analyze</button>
+                                </form>
+                                <div class="success-message w-form-done"></div>
+                                <div class="error-message w-form-fail"></div>
+                            </div>
+                            <div id="stock-analysis-data" class="stock-analysis-data">
+                                <div class="stock-paragraph-div">
+                                    <div class="text-block" id="user-friendly-summary"></div>
+                                </div>
+                                <div class="stock-number-div">
+                                    <div class="text-block" id="final-score"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        </main>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Attach the event listener to the Analyze button
+            document.getElementById('analyze-button').addEventListener('click', getCombinedSummary);
+        });
+
+        async function getCombinedSummary() {
+            console.log("Analyze button clicked!"); // Debug: Check if function is triggered
+
+            const symbol = document.getElementById('stock-input').value;
+            const sector = document.getElementById('sector-input').value;
+
+            if (!symbol || !sector) {
+                alert('Please enter both stock symbol and sector.');
+                return;
+            }
+
+            console.log("Fetching data for symbol:", symbol, " and sector:", sector); // Debug: Log symbol and sector
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/combined-summary?symbol=' + encodeURIComponent(symbol) + '&sector=' + encodeURIComponent(sector));
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log("Data received:", data); // Debug: Log the response data
+
+                // Update the HTML with the response data
+                document.getElementById('user-friendly-summary').innerHTML = (data.user_friendly_summary || 'No summary available').replace(/\n/g, '<br>');
+                //document.getElementById('final-score').textContent = `Final Rating (1-10): ${data.final_score !== undefined ? data.final_score : 'N/A'}`;
+            } catch (error) {
+                console.error('There has been a problem with your fetch operation:', error);
+                alert('Failed to get the stock analysis. Please try again later.');
+            }
+        }
+    </script>
+    <script src="js/jquery.js" type="text/javascript"></script>
+    <script src="js/webflow-script.js" type="text/javascript"></script>
+</body>
+</html>
