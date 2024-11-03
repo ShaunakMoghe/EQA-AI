@@ -71,8 +71,5 @@ To run this project locally, follow these steps:
 ## Contributing
 Feel free to open issues or submit pull requests if you have suggestions or improvements.
 
-## License
-This project is licensed under the MIT License.
-
 ## Contact
 For any questions or suggestions, please contact [Shaunak Moghe](mailto:shaunakmoghe010@gmail.com).
